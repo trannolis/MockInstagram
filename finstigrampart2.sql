@@ -2,9 +2,9 @@ create table Person(
     username         varchar(16),
     first_name         varchar(16),
     last_name         varchar(16),
-password         varchar(16),
-email             varchar(32),
-primary key(username)
+    password         varchar(16),
+    email             varchar(32),
+    primary key(username)
 );
 
 create table Photo(
@@ -21,8 +21,7 @@ create table Tag(
     pID            INT,
     tagStatus        BOOLEAN,
     primary key(username,pID),
-    foreign key (username) references Person(username)
-        on delete cascade,
+    foreign key (username) references Person(username),
     foreign key (pID) references Photo(pID)
     );
 
