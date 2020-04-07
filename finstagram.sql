@@ -1,3 +1,5 @@
+
+/*
 CREATE TABLE Person (
 	username VARCHAR(10) NOT NULL,
 	firstName VARCHAR(10),
@@ -29,3 +31,4 @@ CREATE TABLE ReactTo (
 	comment VARCHAR(140),
 	emoji 
 );
+*/
