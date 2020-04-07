@@ -10,7 +10,7 @@ conn = pymysql.connect(host='localhost',
                        port = 8889,
                        user='root',
                        password='root',
-                       db='FlaskDemo',
+                       db='mockinstagram',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
