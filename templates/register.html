@@ -5,6 +5,9 @@
 <form action="/registerAuth" method="POST">
 	<input type="text" name = "username" placeholder="username" required/> </br>
 	<input type="password" name = "password" placeholder="password" required/></br>
+	<input type="firstname" name ="firstname" placeholder = "firstname" required/><br>
+	<input type="lastname" name ="lastname" placeholder = "lastname" required/><br>
+	<input type="email" name ="email" placeholder = "email" required/><br>
 	<input type="submit" value = Register />
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>
