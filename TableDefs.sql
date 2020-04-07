@@ -8,12 +8,10 @@ CREATE TABLE Person (
         PRIMARY KEY (username)
 );
 
-
-
 CREATE TABLE Photo (
         pID INT AUTO_INCREMENT,
         postingDate DATETIME,
-        filePath VARCHAR(255), -- you may replace this by a BLOB attribute to store the actual photo
+        filePath BLOB NOT NULL, --BLOB
         allFollowers INT,
         caption VARCHAR(1000),
         poster VARCHAR(32),
@@ -58,8 +56,6 @@ CREATE TABLE SharedWith (
 	FOREIGN KEY (groupName, groupCreator) REFERENCES FriendGroup(groupName, groupCreator),
         FOREIGN KEY (pID) REFERENCES Photo (pID)
 );
-
-
 
 CREATE TABLE BelongTo (
         username VARCHAR(32),
