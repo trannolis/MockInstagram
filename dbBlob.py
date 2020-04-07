@@ -34,7 +34,7 @@ def insertBLOB(username, photo):
     caption = request.form['caption']
 
     #   Just to clarify since you specify that the table auto increments photoIDs
-    #   You do not havy to insert into that column since that will be done for you.
+    #   You do not have to insert into that column since that will be done for you.
 
     try:
         connection = mysql.connector.connect(host='localhost',
