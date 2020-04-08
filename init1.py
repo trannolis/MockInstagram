@@ -1,12 +1,21 @@
 #Import Flask Library
-from flask import Flask, render_template, request, session, url_for, redirect
+from flask import Flask, flash, render_template, request, session, url_for, redirect
 import pymysql.cursors
-
+import os
+from datetime import datetime
 import mysql.connector
 from mysql.connector import Error
 
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+
+UPLOAD_FOLDER = '/Users/nicktran/Documents/GitHub/MockInstagram/UPLOAD_FOLDER'
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 #Initialize the app from Flask
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #Configure MySQL
 conn = pymysql.connect(host='localhost',
@@ -100,20 +109,6 @@ def home():
     return render_template('home.html', username=user, posts=data)
 
 
-    """
-    @app.route('/post', methods=['GET', 'POST'])
-def post():
-    username = session['username']
-    cursor = conn.cursor();
-    blog = request.form['blog']
-    query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
-    cursor.execute(query, (blog, username))
-    conn.commit()
-    cursor.close()
-    return redirect(url_for('home'))
-    """
-
-
 @app.route('/select_blogger')
 def select_blogger():
     #check that user is logged in
@@ -121,7 +116,7 @@ def select_blogger():
     #should throw exception if username not found
     
     cursor = conn.cursor();
-    query = 'SELECT DISTINCT username FROM blog'
+    query = 'SELECT DISTINCT username FROM BelongTo NATURAL JOIN FriendGroup'
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
@@ -131,7 +126,7 @@ def select_blogger():
 def show_posts():
     poster = request.args['poster']
     cursor = conn.cursor();
-    query = 'SELECT ts, blog_post FROM blog WHERE username = %s ORDER BY ts DESC'
+    query = 'SELECT postingDate, filePath FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
     cursor.execute(query, poster)
     data = cursor.fetchall()
     cursor.close()
@@ -142,97 +137,42 @@ def logout():
     session.pop('username')
     return redirect('/')
 
-def convertToBinaryData(filename):
-    # Convert digital data to binary format
-    with open(filename, 'rb') as file:
-        binaryData = file.read()
-    return binaryData
 
-def insertBLOB(username, photo):
-    print("Inserting BLOB into photo table")
-
-    username = request.form['username']
-    postingDate = request.form['postingDate']
-    allFollowers = request.form['allFollowers']
-    caption = request.form['caption']
-
-    #   Just to clarify since you specify that the table auto increments photoIDs
-    #   You do not have to insert into that column since that will be done for you.
-
-    try:
-        connection = mysql.connector.connect(host='localhost',
-                                             database='mockinstagram',
-                                             user='root',
-                                             password='root')
-
-        cursor = connection.cursor()
-
-        sql_insert_blob_query = """ INSERT INTO Photo
-                          (postingDate, filePath, allFollowers, caption, poster) VALUES (%s,%s,%s,%s,%s)"""
-
-        photo = convertToBinaryData(photo)
-
-        # Convert data into tuple format
-        insert_blob_tuple = (postingDate, photo, allFollowers, caption, username)
-        result = cursor.execute(sql_insert_blob_query, insert_blob_tuple)
-        connection.commit()
-        print("Image and file inserted successfully as a BLOB into Photos table", result)
-
-    except mysql.connector.Error as error:
-        print("Failed inserting BLOB data into MySQL table {}".format(error))
-
-    finally:
-        if (connection.is_connected()):
-            cursor.close()
-            connection.close()
-            print("MySQL connection is closed")
-
-################################################################
-# Retrieving Image and File stored as a BLOB from MySQL Table
-################################################################
-
-def write_file(data, filename):
-    # Convert binary data to proper format and write it on Hard Disk
-    with open(filename, 'wb') as file:
-        file.write(data)
-
-def readBLOB(photoId, photo):
-    print("Reading BLOB data from Photo table")
-
-    try:
-        connection = mysql.connector.connect(host='localhost',
-                                             database='mockinstagram',
-                                             user='root',
-                                             password='root')
-
-        cursor = connection.cursor()
-        sql_fetch_blob_query = """SELECT photo from Photo where id = %s"""
-
-        cursor.execute(sql_fetch_blob_query, (photoId,))
-        record = cursor.fetchall()
-        for row in record:
-            print("photoID = ", row[0], )
-            image = row[1]
-            print("Storing photo on disk \n")
-            write_file(image, photo)
-
-    except mysql.connector.Error as error:
-        print("Failed to read BLOB data from MySQL table {}".format(error))
-
-    finally:
-        if (connection.is_connected()):
-            cursor.close()
-            connection.close()
-            print("MySQL connection is closed")
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/upload', methods = ['POST'])
+@app.route('/upload', methods = ['GET','POST'])
 def upload():
-    user = session['username']
-    upfile = request.files['inputFile']
-    insertBLOB(username=user, photo=upfile)
+    username = session['username']
 
-    return "success!" + redirect(url_for('home'))
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file', filename=filename))
+
+    return redirect(url_for('home'))
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+#caption = request.form['caption']
+#public = request.form.getlist('shareTo')
 
 app.secret_key = 'some key that you will never guess'
 
