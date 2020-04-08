@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b57c810f-4b68-44ec-a0a4-1d139fa31412" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/john.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/init1.py" beforeDir="false" afterPath="$PROJECT_DIR$/init1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1aDxCGisDfOQd68EEk8yfNzQd3H" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunManager" selected="Python.init1">
+    <configuration name="dbBlob" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MockInstagram" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dbBlob.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="init1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MockInstagram" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/init1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.init1" />
+        <item itemvalue="Python.dbBlob" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b57c810f-4b68-44ec-a0a4-1d139fa31412" name="Default Changelist" comment="" />
+      <created>1586283836650</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586283836650</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="472" y="93" key="CommitChangelistDialog2" timestamp="1586284093209">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="472" y="93" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1586284093209" />
+    <state width="1146" height="81" key="GridCell.Tab.0.bottom" timestamp="1586318817109">
+      <screen x="-255" y="-1080" width="1920" height="1080" />
+    </state>
+    <state width="1146" height="81" key="GridCell.Tab.0.bottom/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817109" />
+    <state width="1657" height="133" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1586289364727" />
+    <state width="1146" height="81" key="GridCell.Tab.0.center" timestamp="1586318817107">
+      <screen x="-255" y="-1080" width="1920" height="1080" />
+    </state>
+    <state width="1146" height="81" key="GridCell.Tab.0.center/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817107" />
+    <state width="1657" height="133" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1586289364726" />
+    <state width="1146" height="81" key="GridCell.Tab.0.left" timestamp="1586318817106">
+      <screen x="-255" y="-1080" width="1920" height="1080" />
+    </state>
+    <state width="1146" height="81" key="GridCell.Tab.0.left/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817106" />
+    <state width="1657" height="133" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1586289364726" />
+    <state width="1146" height="81" key="GridCell.Tab.0.right" timestamp="1586318817108">
+      <screen x="-255" y="-1080" width="1920" height="1080" />
+    </state>
+    <state width="1146" height="81" key="GridCell.Tab.0.right/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817108" />
+    <state width="1657" height="133" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1586289364727" />
+    <state x="340" y="164" key="SettingsEditor" timestamp="1586284032476">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="340" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1586284032476" />
+    <state x="-8" y="-841" width="672" height="678" key="search.everywhere.popup" timestamp="1586314187429">
+      <screen x="-255" y="-1080" width="1920" height="1080" />
+    </state>
+    <state x="-8" y="-841" width="672" height="678" key="search.everywhere.popup/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586314187429" />
+  </component>
+</project>
