@@ -6,6 +6,7 @@ from datetime import datetime
 import mysql.connector
 from mysql.connector import Error
 
+
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 
@@ -162,17 +163,27 @@ def upload():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file', filename=filename))
+
+            caption = request.form['caption']
+            public = request.form.getlist('shareTo')
+            try:
+                if not public:
+                    public.append(0)
+            finally:
+                print("error in try-catch")
+
+            postingDate = datetime.now()
+
+            cursor = conn.cursor()
+            sql_insertPhoto = """ INSERT INTO Photo
+                          (postingDate, filePath, allFollowers, caption, poster) VALUES (%s,%s,%s,%s,%s)"""
+
+            sql_insertTuple = postingDate, filename, public[0], caption, username
+            cursor.execute(sql_insertPhoto, sql_insertTuple)
+            conn.commit()
+            return redirect(url_for('home'))
 
     return redirect(url_for('home'))
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
-
-#caption = request.form['caption']
-#public = request.form.getlist('shareTo')
 
 app.secret_key = 'some key that you will never guess'
 
