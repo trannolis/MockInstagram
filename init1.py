@@ -99,7 +99,7 @@ def registerAuth():
 def home():
     user = session['username']
     cursor = conn.cursor();
-    query = 'SELECT postingDate, filePath FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
+    query = 'SELECT pID, postingDate, filePath FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
     cursor.execute(query, (user))
     data = cursor.fetchall()
     cursor.close()
