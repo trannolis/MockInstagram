@@ -3,9 +3,6 @@ from flask import Flask, flash, render_template, request, session, url_for, redi
 import pymysql.cursors
 import os
 from datetime import datetime
-import mysql.connector
-from mysql.connector import Error
-
 
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
@@ -109,11 +106,10 @@ def home():
     cursor.close()
     return render_template('home.html', username=user, posts=data)
 
-
 @app.route('/select_blogger')
 def select_blogger():
     #check that user is logged in
-    #username = session['username']
+    username = session['username']
     #should throw exception if username not found
     
     cursor = conn.cursor();
