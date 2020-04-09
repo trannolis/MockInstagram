@@ -144,7 +144,7 @@ def follow_user():
         cursor.execute(ins, (user, user_to_follow))
         conn.commit()
     cursor.close()
-    return render_template('show_posts.html', poster_name=user_to_follow, posts=data)
+    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
