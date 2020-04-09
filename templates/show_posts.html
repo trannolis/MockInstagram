@@ -9,26 +9,26 @@
 	}
 </style>
 
-Here are posts by {{poster_name}}:
+Here are posts by {{select_user}}:
 
 <table>
 	<th>Time</th>
-	<th>Post</th>
+	<th>Post (pID)</th>
 
 {% for line in posts %}
 	<tr>
-		<td>{{line.ts}}</td>
-		<td>{{line.blog_post}}</td>
+		<td>{{line.postingDate}}</td>
+		<td>{{line.pID}}</td>
 	</tr>
 {% endfor %}
 </table>
 
 <br>
 <br>
-<a href="/select_blogger">Select another blogger</a>
+<a href="/select_user">Select another user</a>
 <br>
 <br>
-<a href="/home">Post a message</a>
+<a href="/home">Post a photo</a>
 <br>
 <br>
 <a href="/logout">Logout</a>
