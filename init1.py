@@ -8,7 +8,6 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 
 UPLOAD_FOLDER = '/Users/nicktran/Documents/GitHub/MockInstagram/UPLOAD_FOLDER'
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 #Initialize the app from Flask
@@ -106,24 +105,24 @@ def home():
     cursor.close()
     return render_template('home.html', username=user, posts=data)
 
-@app.route('/select_blogger')
-def select_blogger():
+@app.route('/select_user')
+def select_user():
     #check that user is logged in
     username = session['username']
     #should throw exception if username not found
-    
     cursor = conn.cursor();
-    query = 'SELECT DISTINCT username FROM BelongTo NATURAL JOIN FriendGroup'
-    cursor.execute(query)
+    query = 'SELECT DISTINCT followee FROM Follow WHERE follower = %s AND followStatus=1'
+    #query = 'SELECT DISTINCT username FROM BelongTo NATURAL JOIN Follow'
+    cursor.execute(query,username)
     data = cursor.fetchall()
     cursor.close()
-    return render_template('select_blogger.html', user_list=data)
+    return render_template('select_user.html', user_list=data)
 
 @app.route('/show_posts', methods=["GET", "POST"])
 def show_posts():
     poster = request.args['poster']
     cursor = conn.cursor();
-    query = 'SELECT postingDate, filePath FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
+    query = 'SELECT postingDate, pID FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
     cursor.execute(query, poster)
     data = cursor.fetchall()
     cursor.close()
@@ -134,11 +133,9 @@ def logout():
     session.pop('username')
     return redirect('/')
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @app.route('/upload', methods = ['GET','POST'])
 def upload():
@@ -177,6 +174,8 @@ def upload():
             sql_insertTuple = postingDate, filename, public[0], caption, username
             cursor.execute(sql_insertPhoto, sql_insertTuple)
             conn.commit()
+
+            print("Sucessfully uploaded a photo for: " + username)
             return redirect(url_for('home'))
 
     return redirect(url_for('home'))
