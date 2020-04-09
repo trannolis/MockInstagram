@@ -128,20 +128,21 @@ def show_posts():
     cursor.close()
     return render_template('show_posts.html', poster_name=poster, posts=data)
 
-@app.route('/followUser', methods=["GET", "POST"])
-def followUser():
+@app.route('/follow_user', methods=["GET", "POST"])
+def follow_user():
     user = session['username']
     user_to_follow = request.form['followUser']
-    cursor = conn.cursor();
-    query = 'SELECT follower, followee FROM follower WHERE follower = %s AND followee = %s'
-    cursor.execute(query, user_to_follow)
+    cursor = conn.cursor()
+    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s'
+    cursor.execute(query, (user, user_to_follow))
     data = cursor.fetchone()
     if(data):
         query = 'UPDATE follow SET followStatus = 1 WHERE follower = %s AND followee = %s'
         cursor.execute(query, (user, user_to_follow))
     else:
-        query = 'INSERT INTO follower VALUES(%s %s 1)'
-        cursor.execute(query, user_to_follow)
+        ins = 'INSERT INTO follow VALUES(%s, %s, 1)'
+        cursor.execute(ins, (user, user_to_follow))
+        conn.commit()
     cursor.close()
     return render_template('show_posts.html', poster_name=user_to_follow, posts=data)
 
