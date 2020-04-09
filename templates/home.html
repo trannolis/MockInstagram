@@ -34,13 +34,14 @@ Here are your posts:
 
 {% for line in posts %}
 	<tr>
+		<td>{{line.pID}}</td>
 		<td>{{line.postingDate}}</td>
 		<td>{{line.filePath}}</td>
 	</tr>
 {% endfor %}
 </table>
 
-<a href="/select_blogger">Select a blogger</a>
+<a href="/select_user">Select a user</a>
 <br>
 <a href="/logout">Logout</a>
 
