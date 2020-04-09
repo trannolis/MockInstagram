@@ -1,0 +1,13 @@
+Included in this folder are the CREATE TABLE statements and some INSERT statements with test data to help you test your application's features.
+
+NOTE: Because attributes such as filePath and emoji may have different implementations, they may need to be changed according to your design.
+
+IMPORTANT: You will have to change the password values to the hashed values that your app should be storing before inserting. Attached is only the plaintext password in the INSERT statements. 
+
+Instructions:
+1. Some of you may already have created your own tables, if you don't DROP TABLES make sure the variable names match the ones in FinstagramTableDefsSpr20.sql. THESE WILL BE THE VARIABLE NAMES USED FOR THE DEMO. If you want to be safe, drop your tables and insert the file.
+-NOTE: The FinstagramTableDefsSpr20.sql has filePath as a VARCHAR(255) variable. If you wish to replace this with a BLOB attribute, you will have to modify both files accordingly. Same goes for the Emoji attribute. The test data will be using plaintext.
+2. Drag the images folder into your application directory. This is where the application will be looking for the photos if you're using filepath. You can add IMAGES_DIR = os.path.join(os.getcwd(), "images") in your app.py to reference this directory as the image library, and can be accessed with /image/{{image.filePath}} 
+3. Once the tables have been properly created, upload the insert_statements1.sql file into the database.
+
+IMPORTANT: Look over the insert_statements1.sql to understand what is being inserted into the database. This will help you properly configure and ensure that your features are being implemented correctly. 
