@@ -8,8 +8,6 @@ CREATE TABLE Person (
         PRIMARY KEY (username)
 );
 
-
-
 CREATE TABLE Photo (
         pID INT AUTO_INCREMENT,
         postingDate DATETIME,
@@ -59,12 +57,10 @@ CREATE TABLE SharedWith (
         FOREIGN KEY (pID) REFERENCES Photo (pID)
 );
 
-
-
 CREATE TABLE BelongTo (
         username VARCHAR(32),
         groupName VARCHAR(32),
-	groupCreator VARCHAR(32),
+	    groupCreator VARCHAR(32),
         PRIMARY KEY (username, groupName, groupCreator),
         FOREIGN KEY (username) REFERENCES Person (username),
         FOREIGN KEY (groupName, groupCreator) REFERENCES FriendGroup (groupName, groupCreator)
