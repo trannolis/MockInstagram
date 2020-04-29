@@ -146,20 +146,19 @@ def follow_user():
     cursor.close()
     return redirect(url_for('home'))
 
-
 @app.route('/createFriendGroup', methods=["GET", "POST"])
 def createFriendGroup():
     user = session['username']
     reqGroupName = request.form['createFG']
     reqDescr = request.form['descrFG']
     cursor = conn.cursor()
-    query = 'SELECT EXISTS (SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s)'
+    query = 'SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s'
     cursor.execute(query, reqGroupName)
     data = cursor.fetchone()
     print(data)
-    if(data == 1):
+    if(data):
         cursor.close()
-        return redirect('home.html') #needs to be replaced: "GroupName already exists"
+        return redirect('friendGroupError.hmtl')
     else:
         ins = 'INSERT INTO FriendGroup VALUES(%s, %s, %s)'
         cursor.execute(ins, (reqGroupName, user, reqDescr))
