@@ -22,7 +22,7 @@ CREATE TABLE FriendGroup (
         groupName VARCHAR(32),
         groupCreator VARCHAR(32),
         description VARCHAR(1000),
-        PRIMARY KEY (groupName, groupCreator),
+        PRIMARY KEY (gro upName, groupCreator),
         FOREIGN KEY (groupCreator) REFERENCES Person (username)
 );
 
