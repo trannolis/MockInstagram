@@ -110,7 +110,7 @@ def select_user():
     #check that user is logged in
     username = session['username']
     #should throw exception if username not found
-    cursor = conn.cursor();
+    cursor = conn.cursor()
     query = 'SELECT DISTINCT followee FROM Follow WHERE follower = %s AND followStatus=1'
     #query = 'SELECT DISTINCT username FROM BelongTo NATURAL JOIN Follow'
     cursor.execute(query,username)
@@ -121,7 +121,7 @@ def select_user():
 @app.route('/show_posts', methods=["GET", "POST"])
 def show_posts():
     poster = request.args['poster']
-    cursor = conn.cursor();
+    cursor = conn.cursor()
     query = 'SELECT postingDate, pID FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
     cursor.execute(query, poster)
     data = cursor.fetchall()
@@ -145,6 +145,67 @@ def follow_user():
         conn.commit()
     cursor.close()
     return redirect(url_for('home'))
+
+#@app.route('/seeGroup')
+#def seeGroup():
+#   username = session['username']
+#    groupName = request.args['friendGroups'] #gets selected groupName
+#    cursor = conn.cursor()
+#   query = "SELECT DISTINCT username FROM BelongTo WHERE groupName = %s"
+#   cursor.execute(query, groupName)
+#   data = cursor.fetchall()
+#    cursor.close()
+#   return render_template('showGroup.html', members = data, groupName = groupName)
+
+@app.route('/createFriendGroup', methods=["GET", "POST"])
+def createFriendGroup():
+    user = session['username']
+    reqGroupName = request.form['createFG']
+    reqDescr = request.form['descrFG']
+    cursor = conn.cursor()
+    query = 'SELECT EXISTS (SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s)'
+    cursor.execute(query, reqGroupName)
+    data = cursor.fetchone()
+    print(data)
+    if(data == 1):
+        cursor.close()
+        return redirect('home.html') #needs to be replaced: "GroupName already exists"
+    else:
+        ins = 'INSERT INTO FriendGroup VALUES(%s, %s, %s)'
+        cursor.execute(ins, (reqGroupName, user, reqDescr))
+        conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+
+#Extra Feature 1 - Nick Tran
+@app.route('/selectFG')
+def selectFG():
+    username = session['username']
+    cursor = conn.cursor()
+    query = 'SELECT DISTINCT groupName FROM FriendGroup WHERE groupCreator = %s'
+    cursor.execute(query, username)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('selectFG.html', user_list=data)
+
+#Extra Feature 1 - Nick Tran
+@app.route('/addFriend', methods = ["GET", "POST"])
+def addFriend():
+    user = session['username']
+    reqFriend = request.form['friend']
+    groupName = groupName = request.args['friendGroups'] #gets selected groupName
+    cursor = conn.cursor()
+    query = 'SELECT EXISTS (SELECT * FROM Person WHERE Person.username = %s)'
+    cursor.execute(query, reqFriend)
+    data = cursor.fetchall()
+    if(data == 1):
+        return redirect('home.html') #error message - more than one of those users exists
+    else:
+        ins = 'INSERT INTO BelongTo VALUES (%s, %s, %s)'
+        cursor.execute(ins, (reqFriend, groupName, user))
+        conn.commit()
+    cursor.close()
+    return render_template('showGroup.html')
 
 @app.route('/logout')
 def logout():
