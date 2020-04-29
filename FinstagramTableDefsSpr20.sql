@@ -33,7 +33,7 @@ CREATE TABLE ReactTo (
         reactionTime DATETIME,
         comment VARCHAR(1000),
         emoji VARCHAR(32), -- you may replace this by a BLOB or fileName of a jpg or some such
-	PRIMARY KEY (username, pID),
+	    PRIMARY KEY (username, pID),
         FOREIGN KEY (pID) REFERENCES Photo (pID),
         FOREIGN KEY (username) REFERENCES Person (username)
 );
