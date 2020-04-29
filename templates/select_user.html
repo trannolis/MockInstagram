@@ -3,12 +3,10 @@
 </head>
 <body>
 
-
 Whose posts would you like to see?
 <br>
 
 <form action="/show_posts" method="GET">
-
 
 {% for line in user_list %}
 <input type="radio" name="poster" value={{line.followee}}>{{line.followee}}</input>
@@ -16,10 +14,7 @@ Whose posts would you like to see?
 {% endfor %}
 
 <input type="submit" value="View Posts">
-
 </form>
-
-
 
 <a href="/logout">Logout</a>
 
