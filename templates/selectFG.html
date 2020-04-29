@@ -1,0 +1,25 @@
+<html>
+
+<body>
+
+<br>
+	<form action="/addFriend" method = "GET" enctype="multipart/form-data">
+		<h2>Add a Friend to your FriendGroups</h2>
+		Select a Friend Group:
+		{% for line in user_list %}
+		<input type="radio" name="friendGroups" value={{line.groupName}}>{{line.groupName}}</input>
+		{% endfor %}
+		<input type="submit" value = "Add a friend to this group">
+
+		<form action="/addFriend" method="POST" enctype="multipart/form-data">
+		<h2> Add a username to add them to this friend group </h2>
+    	<input type="text" name = "friend" placeholder="Friend's Username"/>
+		</form>
+
+	</form>
+
+</br>
+
+</body>
+
+</html>
