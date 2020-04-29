@@ -146,16 +146,6 @@ def follow_user():
     cursor.close()
     return redirect(url_for('home'))
 
-#@app.route('/seeGroup')
-#def seeGroup():
-#   username = session['username']
-#    groupName = request.args['friendGroups'] #gets selected groupName
-#    cursor = conn.cursor()
-#   query = "SELECT DISTINCT username FROM BelongTo WHERE groupName = %s"
-#   cursor.execute(query, groupName)
-#   data = cursor.fetchall()
-#    cursor.close()
-#   return render_template('showGroup.html', members = data, groupName = groupName)
 
 @app.route('/createFriendGroup', methods=["GET", "POST"])
 def createFriendGroup():
@@ -191,21 +181,22 @@ def selectFG():
 #Extra Feature 1 - Nick Tran
 @app.route('/addFriend', methods = ["GET", "POST"])
 def addFriend():
-    user = session['username']
-    reqFriend = request.form['friend']
-    groupName = groupName = request.args['friendGroups'] #gets selected groupName
+    username = session['username']
+    reqFriend = request.args['friend']
+    groupName = request.args['friendGroups'] #gets selected groupName
     cursor = conn.cursor()
-    query = 'SELECT EXISTS (SELECT * FROM Person WHERE Person.username = %s)'
+    query = 'SELECT * FROM Person WHERE Person.username = %s'
     cursor.execute(query, reqFriend)
     data = cursor.fetchall()
-    if(data == 1):
-        return redirect('home.html') #error message - more than one of those users exists
+    if (data):
+        cursor.close()
+        return render_template("friendError.html")
     else:
         ins = 'INSERT INTO BelongTo VALUES (%s, %s, %s)'
-        cursor.execute(ins, (reqFriend, groupName, user))
+        cursor.execute(ins, (reqFriend, groupName, username))
         conn.commit()
     cursor.close()
-    return render_template('showGroup.html')
+    return render_template('success.html')
 
 @app.route('/logout')
 def logout():
