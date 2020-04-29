@@ -155,10 +155,9 @@ def createFriendGroup():
     query = 'SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s'
     cursor.execute(query, reqGroupName)
     data = cursor.fetchone()
-    print(data)
     if(data):
         cursor.close()
-        return redirect('friendGroupError.hmtl')
+        return render_template('friendGroupError.html')
     else:
         ins = 'INSERT INTO FriendGroup VALUES(%s, %s, %s)'
         cursor.execute(ins, (reqGroupName, user, reqDescr))
@@ -184,16 +183,21 @@ def addFriend():
     reqFriend = request.args['friend']
     groupName = request.args['friendGroups'] #gets selected groupName
     cursor = conn.cursor()
-    query = 'SELECT * FROM Person WHERE Person.username = %s'
+    query = 'SELECT * FROM Person WHERE Person.username = %s' #checks if they exist
     cursor.execute(query, reqFriend)
     data = cursor.fetchall()
-    if (data):
-        cursor.close()
-        return render_template("friendError.html")
-    else:
-        ins = 'INSERT INTO BelongTo VALUES (%s, %s, %s)'
-        cursor.execute(ins, (reqFriend, groupName, username))
-        conn.commit()
+    if(data):
+        #check if they aren't already in the group
+        query1 = 'SELECT * FROM BelongTo WHERE BelongTo.username = %s AND BelongTo.groupName = %s'
+        cursor.execute(query1, (reqFriend, groupName))
+        check = cursor.fetchall()
+        if(check):
+            cursor.close()
+            return render_template("friendError.html") #the person is already in the group
+        else:
+            ins = 'INSERT INTO BelongTo VALUES (%s, %s, %s)'
+            cursor.execute(ins, (reqFriend, groupName, username))
+            conn.commit()
     cursor.close()
     return render_template('success.html')
 
