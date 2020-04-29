@@ -2,16 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b57c810f-4b68-44ec-a0a4-1d139fa31412" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/UPLOAD_FOLDER/john.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/selectFG.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/showGroup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FinstagramTableDefsSpr20.sql" beforeDir="false" afterPath="$PROJECT_DIR$/FinstagramTableDefsSpr20.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TableDefs.sql" beforeDir="false" afterPath="$PROJECT_DIR$/TableDefs.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/init1.py" beforeDir="false" afterPath="$PROJECT_DIR$/init1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/select_user.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/select_user.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -35,6 +45,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -105,37 +116,42 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="527" y="334" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588123753336">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="527" y="334" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1680.1050@0.0.1680.1050" timestamp="1588123753336" />
     <state x="472" y="93" key="CommitChangelistDialog2" timestamp="1586284093209">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="472" y="93" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1586284093209" />
-    <state width="1048" height="131" key="GridCell.Tab.0.bottom" timestamp="1586362438418">
+    <state width="1657" height="172" key="GridCell.Tab.0.bottom" timestamp="1588165494965">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1146" height="81" key="GridCell.Tab.0.bottom/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817109" />
-    <state width="1048" height="131" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1586362438418" />
-    <state width="1048" height="131" key="GridCell.Tab.0.center" timestamp="1586362438417">
+    <state width="1237" height="178" key="GridCell.Tab.0.bottom/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586448589208" />
+    <state width="1657" height="172" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1588165494965" />
+    <state width="1657" height="172" key="GridCell.Tab.0.center" timestamp="1588165494964">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1146" height="81" key="GridCell.Tab.0.center/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817107" />
-    <state width="1048" height="131" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1586362438417" />
-    <state width="1048" height="131" key="GridCell.Tab.0.left" timestamp="1586362438416">
+    <state width="1237" height="178" key="GridCell.Tab.0.center/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586448589207" />
+    <state width="1657" height="172" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1588165494964" />
+    <state width="1657" height="172" key="GridCell.Tab.0.left" timestamp="1588165494963">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1146" height="81" key="GridCell.Tab.0.left/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817106" />
-    <state width="1048" height="131" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1586362438416" />
-    <state width="1048" height="131" key="GridCell.Tab.0.right" timestamp="1586362438417">
+    <state width="1237" height="178" key="GridCell.Tab.0.left/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586448589206" />
+    <state width="1657" height="172" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1588165494963" />
+    <state width="1657" height="172" key="GridCell.Tab.0.right" timestamp="1588165494964">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state width="1146" height="81" key="GridCell.Tab.0.right/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586318817108" />
-    <state width="1048" height="131" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1586362438417" />
+    <state width="1237" height="178" key="GridCell.Tab.0.right/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586448589207" />
+    <state width="1657" height="172" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1588165494964" />
     <state x="340" y="164" key="SettingsEditor" timestamp="1586284032476">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="340" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1586284032476" />
-    <state x="-8" y="-841" width="672" height="678" key="search.everywhere.popup" timestamp="1586314187429">
-      <screen x="-255" y="-1080" width="1920" height="1080" />
+    <state x="216" y="232" width="672" height="660" key="search.everywhere.popup" timestamp="1588120148478">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="-8" y="-841" width="672" height="678" key="search.everywhere.popup/-255.-1080.1920.1080/0.0.1440.900@-255.-1080.1920.1080" timestamp="1586314187429" />
+    <state x="216" y="232" width="672" height="660" key="search.everywhere.popup/0.0.1680.1050@0.0.1680.1050" timestamp="1588120148478" />
   </component>
 </project>
