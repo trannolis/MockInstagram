@@ -3,8 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <h1> Welcome to your Inbox </h1>
 </head>
 <body>
+
+<h2>Select a User:</h2>
+<form action="/respond" method = "GET">
+    {% for line in requests %}
+<input type="radio" name="requester" value={{line.follower}}>{{line.follower}}</input>
+{% endfor %}
+
+    <h2>Accept or Decline their follow request:</h2>
+    <label>
+        <br>
+<input type="radio" name="Accept" value="Accept" id="Accept">
+Accept</label>
+<br>
+<label>
+<input type="radio" name="Accept" value="Decline" id="Decline">
+Decline</label>
+<br>
+<input type="submit" value="Submit">
+
+</form>
+
+<br>
+<a href="/home">Home</a>
+<a href="/logout">Logout</a>
+</br>
 
 </body>
 </html>
