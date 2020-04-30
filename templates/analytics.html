@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Analytics</title>
+</head>
+
+<h1>MockInstagram Analytics</h1>
+
+<body>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+<h3> Users with followers (Users with 0 followers excluded): </h3>
+<table>
+	<th>username</th>
+	<th>number of followers</th>
+
+{% for line in followList %}
+	<tr>
+		<td>{{line.followee}}</td>
+		<td>{{line.numFollowers}}</td>
+	</tr>
+{% endfor %}
+
+</table>
+</body>
+</html>
