@@ -199,7 +199,18 @@ def addFriend():
             cursor.execute(ins, (reqFriend, groupName, username))
             conn.commit()
     cursor.close()
-    return render_template('success.html')
+    return render_template('success.html', groupName = groupName)
+
+#Extra Feature 2 - Nick Tran
+@app.route('/analyze', methods = ['GET','POST'])
+def analyze():
+    username = session['username']
+    cursor = conn.cursor()
+    query = 'SELECT followee, count(followStatus) as numFollowers FROM Follow WHERE followstatus = 1 GROUP BY followee ORDER BY numFollowers desc'
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('analytics.html', followList = data)
 
 @app.route('/logout')
 def logout():
