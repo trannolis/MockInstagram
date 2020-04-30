@@ -6,7 +6,7 @@
 <form action="/upload" method="POST" enctype = "multipart/form-data">
 	<h1>Welcome back {{username}}</h1>
 
-    <h2>Upload new File</h2>
+    <h2>Upload A Photo Here</h2>
     <form method=post enctype=multipart/form-data>
       <input type=file name=file>
 
@@ -26,7 +26,7 @@
 	}
 </style>
 
-Here are your posts:
+<h2> Your Posts </h2>
 
 <table>
 	<th>pID</th>
@@ -39,6 +39,7 @@ Here are your posts:
 		<td>{{line.postingDate}}</td>
 		<td>{{line.filePath}}</td>
 	</tr>
+
 {% endfor %}
 </table>
 
