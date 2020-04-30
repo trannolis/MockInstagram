@@ -18,7 +18,7 @@ Here are posts by {{poster_name}}
 {% for line in posts %}
 	<tr>
 		<td>{{line.postingDate}}</td>
-		<td>{{ <img src= "{{url_for(line.pID)}}"> }}</td>
+		<td>{{ line.pID }}</td>
 	</tr>
 {% endfor %}
 </table>
