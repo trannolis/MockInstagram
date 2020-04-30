@@ -133,18 +133,47 @@ def follow_user():
     user = session['username']
     user_to_follow = request.form['followUser']
     cursor = conn.cursor()
-    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s'
+    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s AND followStatus = 1 OR followStatus = 0'
     cursor.execute(query, (user, user_to_follow))
     data = cursor.fetchone()
     if(data):
-        query = 'UPDATE follow SET followStatus = 1 WHERE follower = %s AND followee = %s'
-        cursor.execute(query, (user, user_to_follow))
-    else:
-        ins = 'INSERT INTO follow VALUES(%s, %s, 1)'
-        cursor.execute(ins, (user, user_to_follow))
-        conn.commit()
+        render_template('addFriendFailure.html') # you are already friends with this person or pending response
+    ins = 'INSERT INTO follow VALUES(%s, %s, 0)'
+    cursor.execute(ins, (user, user_to_follow))
+    conn.commit()
     cursor.close()
     return redirect(url_for('home'))
+
+@app.route('/inbox', methods = ['GET'])
+def inbox():
+    username = session['username']
+    cursor = conn.cursor()
+    query = "SELECT follower FROM Follow WHERE followee = %s AND followStatus = 0"
+    cursor.execute(query, username)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('inbox.html', requests=data)
+
+@app.route('/respond', methods = ["GET"])
+def respond():
+    username = session['username']
+    reqFriend = request.args['requester']
+    accept = request.args['Accept']
+    cursor = conn.cursor()
+    if accept == "Accept":
+        query1 = 'UPDATE Follow SET followStatus = 1 WHERE follower = %s AND followee = %s'
+        cursor.execute(query1, (reqFriend, username))
+        print('Updated Follower: ' + reqFriend + " Followee " + username)
+    else:
+        print('deleting ' + reqFriend + ' request to follow ' + username)
+        query2 = 'DELETE FROM Follow WHERE follower = %s AND followee = %s'
+        cursor.execute(query2, (reqFriend, username))
+    conn.commit()
+    query3 = "SELECT follower FROM Follow WHERE followee = %s AND followStatus = 0"
+    cursor.execute(query3, username)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('inbox.html', requests = data)
 
 @app.route('/createFriendGroup', methods=["GET", "POST"])
 def createFriendGroup():
