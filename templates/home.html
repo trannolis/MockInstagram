@@ -42,7 +42,19 @@ Here are your posts:
 {% endfor %}
 </table>
 
+
+<br>
+<h2>View Your Inbox</h2>
+<a href="/inbox">View Inbox</a>
+</br>
+
+
+<br>
+<h2>View Someone's Posts</h2>
 <a href="/select_user">Select a user</a>
+</br>
+
+
 <br>
 <form action="/follow_user" method="POST" enctype = "multipart/form-data">
   <h2>Follow someone:</h2>
@@ -64,6 +76,14 @@ Here are your posts:
 <h2>Add a Friend to your FriendGroups</h2>
 <a href = "/selectFG"> Select A FriendGroup</a>
 </br>
+
+<br>
+<h2>Analytics</h2>
+<form action = '/analyze' method = "GET" enctype="multipart/form-data">
+	<a href="/analyze">Access Analytics</a>
+</form>
+</br>
+
 
 <br>
 <a href="/logout">Logout</a>
