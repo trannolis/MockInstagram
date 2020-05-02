@@ -16,9 +16,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #Configure MySQL
 conn = pymysql.connect(host='localhost',
-                       port = 8889,
+                       port = 3308,
                        user='root',
-                       password='root',
+                       password='',
                        db='mockinstagram',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
@@ -133,11 +133,11 @@ def follow_user():
     user = session['username']
     user_to_follow = request.form['followUser']
     cursor = conn.cursor()
-    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s AND followStatus = 1 OR followStatus = 0'
+    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s'
     cursor.execute(query, (user, user_to_follow))
     data = cursor.fetchone()
     if(data):
-        render_template('addFriendFailure.html') # you are already friends with this person or pending response
+        return render_template('addFriendFailure.html') # you are already friends with this person or pending response
     ins = 'INSERT INTO follow VALUES(%s, %s, 0)'
     cursor.execute(ins, (user, user_to_follow))
     conn.commit()
@@ -240,6 +240,27 @@ def analyze():
     data = cursor.fetchall()
     cursor.close()
     return render_template('analytics.html', followList = data)
+
+#Extra Feauture 3 - Faizan Hussain
+
+@app.route('/unfollow_user', methods=["GET", "POST"])
+def unfollow_user():
+    user = session['username']
+    user_to_unfollow = request.form['unfollowUser']
+    cursor = conn.cursor()
+    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s AND followStatus = 1'
+    cursor.execute(query, (user, user_to_unfollow))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('unfollowFailure.html') # you aren't already following this person, and can't unfollow them,
+    ins = 'DELETE FROM follow WHERE follower = %s and followee =%s'
+    cursor.execute(ins, (user, user_to_unfollow))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+
+#Extra Feauture 4 - Faizan Hussain
+
 
 @app.route('/logout')
 def logout():
