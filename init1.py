@@ -364,21 +364,44 @@ def search_tag():
         return render_template('noTags.html')  # Nothing found or no permission to view
 
 #Extra Feature 6 - Tommy Gao, react to a photo
-@app.route('/reacts')  #shows reactions
+@app.route('/reacts', methods=["GET", "POST"])  # shows reactions
 def react():
-    #check that user is logged in
+    # check that user is logged in
     username = session['username']
     postID = request.args['reactPost']
+
     cursor = conn.cursor()
-    query = 'SELECT pID, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
-    # query = 'SELECT DISTINCT username FROM BelongTo NATURAL JOIN Follow'
+    query = 'SELECT DISTINCT pID, username, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
     cursor.execute(query, postID)
     data = cursor.fetchall()
     cursor.close()
     return render_template('reacts.html', postID=postID, reactions=data)
-  
-# react yourself
 
+# react yourself
+@app.route('/reacting', methods=["GET", "POST"])
+def reacting():
+    # check that user is logged in
+    username = session['username']
+    postID = request.args['reactPost']
+    emoji = request.args['reaction']
+    comm = request.args['comment']
+    reactingDate = datetime.now()
+    cursor = conn.cursor()
+    query = 'SELECT username FROM reactto WHERE username = %s'
+    cursor.execute(query, (username))
+    data = cursor.fetchall()
+    if(data):
+        dele = 'DELETE FROM reactto WHERE username = %s'
+        cursor.execute(dele, (username))
+
+    ins = 'INSERT INTO reactto VALUES(%s, %s, %s, %s, %s)'
+    cursor.execute(ins, (username, postID, reactingDate, comm, emoji))
+    query = 'SELECT pID, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
+    cursor.execute(query, postID)
+    data = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    return render_template('reacting.html', postID=postID, reactions=data)
       
 @app.route('/logout')
 def logout():
