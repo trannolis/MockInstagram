@@ -268,14 +268,14 @@ def search_tag():
     user = session['username']
     user_to_searchTag = request.form['searchTag']
     cursor = conn.cursor()
-    query = 'SELECT * FROM tag WHERE username = %s AND tagStatus > 0'
-    cursor.execute(query, user_to_searchTag)
+    query = 'SELECT pID FROM tag WHERE username = %s AND tagStatus > 0 AND pID IN (SELECT pID FROM photo AS p NATURAL JOIN follow AS f WHERE p.allFollowers=1 AND f.follower= %s AND f.followee = p.poster AND f.followStatus = 1)'
+    cursor.execute(query, (user_to_searchTag, user))
     data = cursor.fetchone()
     if(data):
 
 
-        query = 'SELECT pID FROM tag WHERE username = %s AND tagStatus > 0'
-        cursor.execute(query, user_to_searchTag)
+        query = 'SELECT pID FROM tag WHERE username = %s AND tagStatus > 0 AND pID IN (SELECT pID FROM photo AS p NATURAL JOIN follow AS f WHERE p.allFollowers=1 AND f.follower= %s AND f.followee = p.poster AND f.followStatus = 1)'
+        cursor.execute(query, (user_to_searchTag, user))
         data = cursor.fetchall()
         cursor.close()
         return render_template('show_tag.html', taggedName=user_to_searchTag, posts=data)
