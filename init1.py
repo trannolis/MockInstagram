@@ -168,9 +168,7 @@ def respond():
     if accept == "Accept":
         query1 = 'UPDATE Follow SET followStatus = 1 WHERE follower = %s AND followee = %s'
         cursor.execute(query1, (reqFriend, username))
-        print('Updated Follower: ' + reqFriend + " Followee " + username)
     else:
-        print('deleting ' + reqFriend + ' request to follow ' + username)
         query2 = 'DELETE FROM Follow WHERE follower = %s AND followee = %s'
         cursor.execute(query2, (reqFriend, username))
     conn.commit()
@@ -245,11 +243,16 @@ def addFriend():
 def analyze():
     username = session['username']
     cursor = conn.cursor()
+    #finding number of followers per person
     query = 'SELECT followee, count(followStatus) as numFollowers FROM Follow WHERE followstatus = 1 GROUP BY followee ORDER BY numFollowers desc'
     cursor.execute(query)
     data = cursor.fetchall()
+    #finding most-reacted to photos
+    query2 = 'SELECT DISTINCT pID, count(pID) as numReactions FROM reactto GROUP BY pID ORDER BY DESC LIMIT 10'
+    cursor.execute(query2)
+    data2 = cursor.fetchall()
     cursor.close()
-    return render_template('analytics.html', followList = data)
+    return render_template('analytics.html', followList=data, reactPhotos=data2)
 
 #Extra Feauture 3 - Faizan Hussain
 
