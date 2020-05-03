@@ -267,7 +267,7 @@ def unfollow_user():
 #Extra Feauture 4 - Faizan Hussain
 
 
-#Extra Feature 5 - Tommy Gao
+#Extra Feature 5 - Tommy Gao, search tagged users
 @app.route('/search_tag', methods=["GET", "POST"])
 def search_tag():
     user = session['username']
@@ -295,6 +295,8 @@ def search_tag():
     else:
         return render_template('noTags.html')  # Nothing found or no permission to view
 
+#Extra Feature 6 - Tommy Gao, react to a photo
+      
 @app.route('/logout')
 def logout():
     session.pop('username')
