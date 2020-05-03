@@ -266,6 +266,71 @@ def unfollow_user():
 
 #Extra Feauture 4 - Faizan Hussain
 
+@app.route('/setTags', methods=["GET", "POST"])
+def setTags():
+    user = session['username']
+    reqpID = request.form['idPhoto']
+    reqTag = request.form['tagPhoto']
+    cursor = conn.cursor();
+    query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.pID IN (SELECT pID FROM Photo AS p1 WHERE 
+    p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+    ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+    f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+    AS s USING(groupName, groupCreator) WHERE b.username = %s))"""
+    cursor.execute(query, (str(reqpID),user,user,user))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('setTagsFailure.html')
+    if(reqTag==user):
+        ins = 'INSERT INTO tag VALUES(%s, %s, 1)'
+        cursor.execute(ins, (str(reqpID),user))
+    else:
+        query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.pID IN (SELECT pID FROM Photo AS p1 WHERE 
+        p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+        ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+        f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+        AS s USING(groupName, groupCreator) WHERE b.username = %s))"""
+        cursor.execute(query, (str(reqpID),reqTag,reqTag,reqTag))
+        data = cursor.fetchone()
+        if(data):
+            ins = 'INSERT INTO tag VALUES(%s, %s, 0)'
+            cursor.execute(ins, (str(reqpID),reqTag))
+        else:
+            return render_template('setTagsFailure.html')
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+
+@app.route('/proposedTags', methods = ['GET'])
+def proposedTags():
+    username = session['username']
+    cursor = conn.cursor()
+    query = "SELECT pID FROM tag WHERE username = %s AND tagStatus = 0"
+    cursor.execute(query, username)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('proposedTags.html', requests=data)
+
+@app.route('/respondToTags', methods = ["GET"])
+def respondToTags():
+    user = session['username']
+    reqpID = request.args['idPhoto']
+    accept = request.args['Accept']
+    cursor = conn.cursor()
+    if accept == "Accept":
+        query1 = 'UPDATE tag SET tagStatus = 1 WHERE username = %s AND pID = %s'
+        cursor.execute(query1, (user, str(reqpID)))
+        print('Updated Tagged Person: ' + user + " Photo: " + reqpID)
+    else:
+        print('deleting ' + user + ' tag from photo ' + reqpID)
+        query2 = 'DELETE FROM tag WHERE username = %s AND pID = %s'
+        cursor.execute(query2, (user, str(reqpID)))
+    conn.commit()
+    query3 = "SELECT pID FROM tag WHERE username = %s AND tagStatus = 0"
+    cursor.execute(query3, user)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('proposedTags.html', requests = data)
 
 #Extra Feature 5 - Tommy Gao, search tagged users
 @app.route('/search_tag', methods=["GET", "POST"])
