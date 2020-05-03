@@ -296,6 +296,21 @@ def search_tag():
         return render_template('noTags.html')  # Nothing found or no permission to view
 
 #Extra Feature 6 - Tommy Gao, react to a photo
+@app.route('/reacts')  #shows reactions
+def react():
+    #check that user is logged in
+    username = session['username']
+    postID = request.args['reactPost']
+    cursor = conn.cursor()
+    query = 'SELECT pID, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
+    # query = 'SELECT DISTINCT username FROM BelongTo NATURAL JOIN Follow'
+    cursor.execute(query, postID)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('reacts.html', postID=postID, reactions=data)
+  
+# react yourself
+
       
 @app.route('/logout')
 def logout():
