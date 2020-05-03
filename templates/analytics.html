@@ -19,13 +19,27 @@
 	<th>username</th>
 	<th>number of followers</th>
 
-{% for line in followList %}
-	<tr>
-		<td>{{line.followee}}</td>
-		<td>{{line.numFollowers}}</td>
-	</tr>
-{% endfor %}
+	{% for line in followList %}
+		<tr>
+			<td>{{line.followee}}</td>
+			<td>{{line.numFollowers}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+<h3>Top 10 Photos with the most reactions</h3>
+<table>
+	<th>pID</th>
+	<th>Number of reactions</th>
+
+	{% for line in reactPhotos%}
+		<tr>
+			<td>{{line.pID}}</td>
+			<td>{{line.numReactions}}</td>
+		</tr>
+	{% endfor %}
 
 </table>
+
 </body>
 </html>
