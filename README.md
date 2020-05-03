@@ -9,8 +9,7 @@ Nick Tran
 
 ## Features
 - uploading photo
--- private photos
--- photo descriptions
+ (private photo, photo descriptions)
 - view photos
 - follow users
 - create friend groups
