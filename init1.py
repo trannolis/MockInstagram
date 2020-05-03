@@ -99,8 +99,13 @@ def registerAuth():
 def home():
     user = session['username']
     cursor = conn.cursor();
-    query = 'SELECT pID, postingDate, filePath FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
-    cursor.execute(query, (user))
+    query = """SELECT pID, postingDate, filePath FROM Photo AS p1 WHERE 
+    p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+    ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+    f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+    AS s USING(groupName, groupCreator) WHERE b.username = %s) ORDER BY 
+    postingDate DESC"""
+    cursor.execute(query, (user,user,user))
     data = cursor.fetchall()
     cursor.close()
     return render_template('home.html', username=user, posts=data)
