@@ -137,7 +137,7 @@ def follow_user():
     cursor.execute(query, (user, user_to_follow))
     data = cursor.fetchone()
     if(data):
-        render_template('addFriendFailure.html') # you are already friends with this person or pending response
+        return render_template('addFriendFailure.html') # you are already friends with this person or pending response
     ins = 'INSERT INTO follow VALUES(%s, %s, 0)'
     cursor.execute(ins, (user, user_to_follow))
     conn.commit()
