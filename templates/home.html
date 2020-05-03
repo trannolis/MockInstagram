@@ -32,12 +32,28 @@
 	<th>pID</th>
 	<th>Time</th>
 	<th>Post</th>
+	<th>More</th>
+
 
 {% for line in posts %}
 	<tr>
 		<td>{{line.pID}}</td>
 		<td>{{line.postingDate}}</td>
 		<td>{{line.filePath}}</td>
+		<td><form action="/reacts" method="GET" enctype = "multipart/form-data">
+  		<button style="background: none!important;
+  		border: none;
+  		padding: 0!important;
+  		/*optional*/
+  		font-family: arial, sans-serif;
+  		/*input has OS specific font-family*/
+  		color: #0000EE;
+  		text-decoration: underline;
+  		margin:auto;
+  		display:block;
+  		cursor: pointer;" name="reactPost" value={{line.pID}}>React</button></form>
+		</td>
+
 	</tr>
 
 {% endfor %}
