@@ -186,8 +186,8 @@ def createFriendGroup():
     reqGroupName = request.form['createFG']
     reqDescr = request.form['descrFG']
     cursor = conn.cursor()
-    query = 'SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s'
-    cursor.execute(query, reqGroupName)
+    query = 'SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s AND FriendGroup.groupCreator = %s'
+    cursor.execute(query, (reqGroupName,user))
     data = cursor.fetchone()
     if(data):
         cursor.close()
@@ -195,6 +195,9 @@ def createFriendGroup():
     else:
         ins = 'INSERT INTO FriendGroup VALUES(%s, %s, %s)'
         cursor.execute(ins, (reqGroupName, user, reqDescr))
+        conn.commit()
+        ins = 'INSERT INTO belongto VALUES(%s, %s, %s)'
+        cursor.execute(ins, (user, reqGroupName, user))
         conn.commit()
     cursor.close()
     return redirect(url_for('home'))
