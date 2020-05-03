@@ -16,9 +16,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #Configure MySQL
 conn = pymysql.connect(host='localhost',
-                       port = 8889,
+                       port = 3308,
                        user='root',
-                       password='root',
+                       password='',
                        db='mockinstagram',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
@@ -99,8 +99,13 @@ def registerAuth():
 def home():
     user = session['username']
     cursor = conn.cursor();
-    query = 'SELECT pID, postingDate, filePath FROM Photo WHERE poster = %s ORDER BY postingDate DESC'
-    cursor.execute(query, (user))
+    query = """SELECT pID, postingDate, filePath FROM Photo AS p1 WHERE 
+    p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+    ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+    f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+    AS s USING(groupName, groupCreator) WHERE b.username = %s) ORDER BY 
+    postingDate DESC"""
+    cursor.execute(query, (user,user,user))
     data = cursor.fetchall()
     cursor.close()
     return render_template('home.html', username=user, posts=data)
@@ -133,7 +138,7 @@ def follow_user():
     user = session['username']
     user_to_follow = request.form['followUser']
     cursor = conn.cursor()
-    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s AND followStatus = 1 OR followStatus = 0'
+    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s'
     cursor.execute(query, (user, user_to_follow))
     data = cursor.fetchone()
     if(data):
@@ -181,8 +186,8 @@ def createFriendGroup():
     reqGroupName = request.form['createFG']
     reqDescr = request.form['descrFG']
     cursor = conn.cursor()
-    query = 'SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s'
-    cursor.execute(query, reqGroupName)
+    query = 'SELECT * FROM FriendGroup WHERE FriendGroup.groupName = %s AND FriendGroup.groupCreator = %s'
+    cursor.execute(query, (reqGroupName,user))
     data = cursor.fetchone()
     if(data):
         cursor.close()
@@ -190,6 +195,9 @@ def createFriendGroup():
     else:
         ins = 'INSERT INTO FriendGroup VALUES(%s, %s, %s)'
         cursor.execute(ins, (reqGroupName, user, reqDescr))
+        conn.commit()
+        ins = 'INSERT INTO belongto VALUES(%s, %s, %s)'
+        cursor.execute(ins, (user, reqGroupName, user))
         conn.commit()
     cursor.close()
     return redirect(url_for('home'))
@@ -241,6 +249,160 @@ def analyze():
     cursor.close()
     return render_template('analytics.html', followList = data)
 
+#Extra Feauture 3 - Faizan Hussain
+
+@app.route('/unfollow_user', methods=["GET", "POST"])
+def unfollow_user():
+    user = session['username']
+    user_to_unfollow = request.form['unfollowUser']
+    cursor = conn.cursor()
+    query = 'SELECT * FROM follow WHERE follower = %s AND followee = %s AND followStatus = 1'
+    cursor.execute(query, (user, user_to_unfollow))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('unfollowFailure.html') # you aren't already following this person, and can't unfollow them,
+    ins = 'DELETE FROM follow WHERE follower = %s and followee =%s'
+    cursor.execute(ins, (user, user_to_unfollow))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+
+#Extra Feauture 4 - Faizan Hussain
+
+@app.route('/setTags', methods=["GET", "POST"])
+def setTags():
+    user = session['username']
+    reqpID = request.form['idPhoto']
+    reqTag = request.form['tagPhoto']
+    cursor = conn.cursor();
+    query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.pID IN (SELECT pID FROM Photo AS p1 WHERE 
+    p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+    ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+    f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+    AS s USING(groupName, groupCreator) WHERE b.username = %s))"""
+    cursor.execute(query, (str(reqpID),user,user,user))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('setTagsFailure.html')
+    if(reqTag==user):
+        ins = 'INSERT INTO tag VALUES(%s, %s, 1)'
+        cursor.execute(ins, (str(reqpID),user))
+    else:
+        query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.pID IN (SELECT pID FROM Photo AS p1 WHERE 
+        p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+        ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+        f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+        AS s USING(groupName, groupCreator) WHERE b.username = %s))"""
+        cursor.execute(query, (str(reqpID),reqTag,reqTag,reqTag))
+        data = cursor.fetchone()
+        if(data):
+            ins = 'INSERT INTO tag VALUES(%s, %s, 0)'
+            cursor.execute(ins, (str(reqpID),reqTag))
+        else:
+            return render_template('setTagsFailure.html')
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+
+@app.route('/proposedTags', methods = ['GET'])
+def proposedTags():
+    username = session['username']
+    cursor = conn.cursor()
+    query = "SELECT pID FROM tag WHERE username = %s AND tagStatus = 0"
+    cursor.execute(query, username)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('proposedTags.html', requests=data)
+
+@app.route('/respondToTags', methods = ["GET"])
+def respondToTags():
+    user = session['username']
+    reqpID = request.args['idPhoto']
+    accept = request.args['Accept']
+    cursor = conn.cursor()
+    if accept == "Accept":
+        query1 = 'UPDATE tag SET tagStatus = 1 WHERE username = %s AND pID = %s'
+        cursor.execute(query1, (user, str(reqpID)))
+        print('Updated Tagged Person: ' + user + " Photo: " + reqpID)
+    else:
+        print('deleting ' + user + ' tag from photo ' + reqpID)
+        query2 = 'DELETE FROM tag WHERE username = %s AND pID = %s'
+        cursor.execute(query2, (user, str(reqpID)))
+    conn.commit()
+    query3 = "SELECT pID FROM tag WHERE username = %s AND tagStatus = 0"
+    cursor.execute(query3, user)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('proposedTags.html', requests = data)
+
+#Extra Feature 5 - Tommy Gao, search tagged users
+@app.route('/search_tag', methods=["GET", "POST"])
+def search_tag():
+    user = session['username']
+    user_to_searchTag = request.form['searchTag']
+    cursor = conn.cursor()
+    query = """SELECT pID FROM tag WHERE username = %s AND tagStatus > 0 AND 
+    (pID IN (SELECT pID FROM photo AS p NATURAL JOIN follow AS f WHERE 
+    p.allFollowers=1 AND f.follower= %s AND f.followee = p.poster AND 
+    f.followStatus = 1) OR pID IN (SELECT pID FROM sharedwith AS s NATURAL JOIN 
+    belongto AS b WHERE s.groupName = b.groupName AND s.groupCreator = 
+    b.groupCreator AND b.username = %s))"""
+    cursor.execute(query, (user_to_searchTag, user, user))
+    data = cursor.fetchone()
+    if(data):
+        query = """SELECT pID FROM tag WHERE username = %s AND tagStatus > 0 
+        AND (pID IN (SELECT pID FROM photo AS p NATURAL JOIN follow AS f WHERE 
+        p.allFollowers=1 AND f.follower= %s AND f.followee = p.poster AND 
+        f.followStatus = 1) OR pID IN (SELECT pID FROM sharedwith AS s NATURAL 
+        JOIN belongto AS b WHERE s.groupName = b.groupName AND s.groupCreator = 
+        b.groupCreator AND b.username = %s))"""
+        cursor.execute(query, (user_to_searchTag, user, user))
+        data = cursor.fetchall()
+        cursor.close()
+        return render_template('show_tag.html', taggedName=user_to_searchTag, posts=data)
+    else:
+        return render_template('noTags.html')  # Nothing found or no permission to view
+
+#Extra Feature 6 - Tommy Gao, react to a photo
+@app.route('/reacts', methods=["GET", "POST"])  # shows reactions
+def react():
+    # check that user is logged in
+    username = session['username']
+    postID = request.args['reactPost']
+
+    cursor = conn.cursor()
+    query = 'SELECT DISTINCT pID, username, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
+    cursor.execute(query, postID)
+    data = cursor.fetchall()
+    cursor.close()
+    return render_template('reacts.html', postID=postID, reactions=data)
+
+# react yourself
+@app.route('/reacting', methods=["GET", "POST"])
+def reacting():
+    # check that user is logged in
+    username = session['username']
+    postID = request.args['reactPost']
+    emoji = request.args['reaction']
+    comm = request.args['comment']
+    reactingDate = datetime.now()
+    cursor = conn.cursor()
+    query = 'SELECT username FROM reactto WHERE username = %s'
+    cursor.execute(query, (username))
+    data = cursor.fetchall()
+    if(data):
+        dele = 'DELETE FROM reactto WHERE username = %s'
+        cursor.execute(dele, (username))
+
+    ins = 'INSERT INTO reactto VALUES(%s, %s, %s, %s, %s)'
+    cursor.execute(ins, (username, postID, reactingDate, comm, emoji))
+    query = 'SELECT pID, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
+    cursor.execute(query, postID)
+    data = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    return render_template('reacting.html', postID=postID, reactions=data)
+      
 @app.route('/logout')
 def logout():
     session.pop('username')
@@ -287,12 +449,40 @@ def upload():
             sql_insertTuple = postingDate, filename, public[0], caption, username
             cursor.execute(sql_insertPhoto, sql_insertTuple)
             conn.commit()
-
             print("Sucessfully uploaded a photo for: " + username)
             return redirect(url_for('home'))
 
     return redirect(url_for('home'))
 
+@app.route('/sharePhoto', methods=["GET", "POST"])
+def sharePhoto():
+    user = session['username']
+    reqpID = request.form['idPhoto']
+    reqGroupName = request.form['gName']
+    reqGroupCreator = request.form['gCreator']
+    cursor = conn.cursor();
+    query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.poster= %s"""
+    cursor.execute(query, (str(reqpID),user))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('sharePhotoFailure1.html')
+    query = """SELECT pID FROM sharedwith WHERE pID = %s"""
+    cursor.execute(query,str(reqpID))
+    data = cursor.fetchone()
+    if(data):
+        return render_template('sharePhotoFailure2.html')
+    query = """SELECT username FROM belongTo WHERE username = %s AND groupName = %s AND groupCreator= %s"""
+    cursor.execute(query,(user,reqGroupName,reqGroupCreator))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('sharePhotoFailure3.html')
+    else:
+        query = """INSERT INTO sharedwith VALUES(%s, %s, %s)"""
+        cursor.execute(query, (str(reqpID),reqGroupName,reqGroupCreator))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+  
 app.secret_key = 'some key that you will never guess'
 
 #Run the app on localhost port 5000

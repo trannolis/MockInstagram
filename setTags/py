@@ -1,0 +1,36 @@
+#need to insert in init.py
+
+@app.route('/setTags', methods=["GET", "POST"])
+def setTags():
+    user = session['username']
+    reqpID = request.form['idPhoto']
+    reqTag = request.form['tagPhoto']
+    cursor = conn.cursor();
+    query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.pID IN (SELECT pID FROM Photo AS p1 WHERE 
+    p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+    ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+    f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+    AS s USING(groupName, groupCreator) WHERE b.username = %s))"""
+    cursor.execute(query, (str(reqpID),user,user,user))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('setTagsFailure.html')
+    if(reqTag==user):
+        ins = 'INSERT INTO tags VALUES(%s, %s, 1)'
+        cursor.execute(ins, (str(reqpID),user))
+    else:
+        query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.pID IN (SELECT pID FROM Photo AS p1 WHERE 
+        p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
+        ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
+        f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
+        AS s USING(groupName, groupCreator) WHERE b.username = %s))"""
+        cursor.execute(query, (str(reqpID),reqTag,reqTag,reqTag))
+        data = cursor.fetchone()
+        if(data):
+            ins = 'INSERT INTO tags VALUES(%s, %s, 0)'
+            cursor.execute(ins, (str(reqpID),reqTag))
+        else:
+            return render_template('setTagsFailure.html')
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
