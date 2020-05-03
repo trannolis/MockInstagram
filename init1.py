@@ -262,6 +262,26 @@ def unfollow_user():
 #Extra Feauture 4 - Faizan Hussain
 
 
+#Extra Feature 5 - Tommy Gao
+@app.route('/search_tag', methods=["GET", "POST"])
+def search_tag():
+    user = session['username']
+    user_to_searchTag = request.form['searchTag']
+    cursor = conn.cursor()
+    query = 'SELECT * FROM tag WHERE username = %s AND tagStatus > 0'
+    cursor.execute(query, user_to_searchTag)
+    data = cursor.fetchone()
+    if(data):
+
+
+        query = 'SELECT pID FROM tag WHERE username = %s AND tagStatus > 0'
+        cursor.execute(query, user_to_searchTag)
+        data = cursor.fetchall()
+        cursor.close()
+        return render_template('show_tag.html', taggedName=user_to_searchTag, posts=data)
+    else:
+        return render_template('noTags.html')  # Nothing found or no permission to view
+
 @app.route('/logout')
 def logout():
     session.pop('username')
