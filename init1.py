@@ -423,12 +423,40 @@ def upload():
             sql_insertTuple = postingDate, filename, public[0], caption, username
             cursor.execute(sql_insertPhoto, sql_insertTuple)
             conn.commit()
-
             print("Sucessfully uploaded a photo for: " + username)
             return redirect(url_for('home'))
 
     return redirect(url_for('home'))
 
+@app.route('/sharePhoto', methods=["GET", "POST"])
+def sharePhoto():
+    user = session['username']
+    reqpID = request.form['idPhoto']
+    reqGroupName = request.form['gName']
+    reqGroupCreator = request.form['gCreator']
+    cursor = conn.cursor();
+    query = """SELECT pID FROM photo As p0 WHERE p0.pID= %s AND p0.poster= %s"""
+    cursor.execute(query, (str(reqpID),user))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('sharePhotoFailure1.html')
+    query = """SELECT pID FROM sharedwith WHERE pID = %s"""
+    cursor.execute(query,str(reqpID))
+    data = cursor.fetchone()
+    if(data):
+        return render_template('sharePhotoFailure2.html')
+    query = """SELECT username FROM belongTo WHERE username = %s AND groupName = %s AND groupCreator= %s"""
+    cursor.execute(query,(user,reqGroupName,reqGroupCreator))
+    data = cursor.fetchone()
+    if(not data):
+        return render_template('sharePhotoFailure3.html')
+    else:
+        query = """INSERT INTO sharedwith VALUES(%s, %s, %s)"""
+        cursor.execute(query, (str(reqpID),reqGroupName,reqGroupCreator))
+    conn.commit()
+    cursor.close()
+    return redirect(url_for('home'))
+  
 app.secret_key = 'some key that you will never guess'
 
 #Run the app on localhost port 5000
