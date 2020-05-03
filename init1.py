@@ -219,6 +219,8 @@ def addFriend():
     username = session['username']
     reqFriend = request.args['friend']
     groupName = request.args['friendGroups'] #gets selected groupName
+    if username == reqFriend:
+        return render_template("friendError2.html")
     cursor = conn.cursor()
     query = 'SELECT * FROM Person WHERE Person.username = %s' #checks if they exist
     cursor.execute(query, reqFriend)
