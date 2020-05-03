@@ -8,6 +8,7 @@
 
 <table>
 	<th>Post</th>
+	<th>User</th>
 	<th>Time</th>
 	<th>Emoji</th>
 	<th>Comment</th>
@@ -15,6 +16,7 @@
 {% for line in reactions %}
 	<tr>
 		<td>{{line.pID}}</td>
+		<td>{{line.username}}</td>
 		<td>{{ line.reactionTime }}</td>
 		<td>{{ line.emoji }}</td>
 		<td>{{ line.comment }}</td>
@@ -24,15 +26,14 @@
 </table>
 
 <h3>React:</h3>
-<form action="/follow_user" method="POST" enctype = "multipart/form-data">
-
+<p>You may only react once. Please rereact if you want to react again. Your old reaction will be reamoved.</p>
+<form action="/reacting" method="GET" enctype = "multipart/form-data">
+	<input type="hidden" name='reactPost' value={{postID}}>
 	<input type="radio" name="reaction" value='thumbs up'>&#128077;</input>
 	<input type="radio" name="reaction" value='heart'>&#129505;</input>
 	<br>
 	<input type="text" name = "comment" placeholder="Comment Here">
-	<br>
-
-<input type="submit" value="React">
+<input type="submit" value="react">
 </form>
 
 <a href="/home">Home</a><br>
