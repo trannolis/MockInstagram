@@ -26,6 +26,15 @@ conn = pymysql.connect(host='localhost',
 #Define a route to hello function
 @app.route('/')
 def hello():
+    cursor = conn.cursor()
+    query = 'SELECT * FROM Person'
+    cursor.execute(query)
+    data = cursor.fetchall()
+    if(not data):
+        ins = 'INSERT INTO Person VALUES(%s, %s, %s, %s, %s)'
+        cursor.execute(ins, ('Admin', 'Admin', 'Admin', 'Admin', 'Admin'))
+        conn.commit()
+        cursor.close()
     return render_template('index.html')
 
 #Define route for login
@@ -242,17 +251,20 @@ def addFriend():
 @app.route('/analyze', methods = ['GET','POST'])
 def analyze():
     username = session['username']
-    cursor = conn.cursor()
-    #finding number of followers per person
-    query = 'SELECT followee, count(followStatus) as numFollowers FROM Follow WHERE followstatus = 1 GROUP BY followee ORDER BY numFollowers desc'
-    cursor.execute(query)
-    data = cursor.fetchall()
-    #finding most-reacted to photos
-    query2 = 'SELECT DISTINCT pID, count(pID) as numReactions FROM reactto GROUP BY pID ORDER BY DESC LIMIT 10'
-    cursor.execute(query2)
-    data2 = cursor.fetchall()
-    cursor.close()
-    return render_template('analytics.html', followList=data, reactPhotos=data2)
+    if username == "Admin":
+        cursor = conn.cursor()
+        #finding number of followers per person
+        query = 'SELECT followee, count(followStatus) as numFollowers FROM Follow WHERE followstatus = 1 GROUP BY followee ORDER BY numFollowers desc'
+        cursor.execute(query)
+        data = cursor.fetchall()
+        #finding most-reacted to photos
+        query2 = 'SELECT DISTINCT pID, count(pID) as numReactions FROM reactto GROUP BY pID ORDER BY numReactions desc LIMIT 10'
+        cursor.execute(query2)
+        data2 = cursor.fetchall()
+        cursor.close()
+        return render_template('analytics.html', followList=data, reactPhotos=data2)
+    else:
+        return render_template("AnalyticsError.html")
 
 #Extra Feauture 3 - Faizan Hussain
 
