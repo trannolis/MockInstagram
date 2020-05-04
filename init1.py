@@ -111,6 +111,21 @@ def home():
     cursor.close()
     return render_template('home.html', username=user, posts=data)
 
+# @app.route('/show_tags', methods = ['GET'])
+# def show_tags():
+#     cursor = conn.cursor()
+#     cursor.close()
+#     return render_template('showTags.html')
+# 
+# @app.route('/see_tags', methods = ['GET'])
+# def see_tags():
+#     reqpID = request.args['idPhoto']
+#     cursor = conn.cursor()
+#     query = "SELECT username, firstName,lastName FROM tag AS t JOIN person AS p USING(username) WHERE pID = %s AND tagStatus =%s"
+#     cursor.execute(query, (reqpID,1))
+#     data = cursor.fetchall()
+#     return render_template('showTags1.html', posts=data)
+  
 @app.route('/select_user')
 def select_user():
     #check that user is logged in
