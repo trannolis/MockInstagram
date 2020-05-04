@@ -266,7 +266,7 @@ def analyze():
     else:
         return render_template("AnalyticsError.html")
 
-#Extra Feauture 3 - Faizan Hussain
+#Extra Feature 3 - Faizan Hussain
 
 @app.route('/unfollow_user', methods=["GET", "POST"])
 def unfollow_user():
@@ -281,16 +281,23 @@ def unfollow_user():
     ins = 'DELETE FROM follow WHERE follower = %s and followee =%s'
     cursor.execute(ins, (user, user_to_unfollow))
     conn.commit()
-    ins = """DELETE FROM tag as t WHERE t.username = %s AND t.pID IN(SELECT pID 
+    query = """SELECT pID FROM tag as t WHERE t.username = %s AND t.pID IN(SELECT pID 
     FROM Photo AS p WHERE p.poster = %s) AND t.pID NOT IN (SELECT pID FROM 
     sharedwith AS s JOIN belongto AS b USING(groupName,groupCreator) 
     WHERE b.username= %s)"""
-    cursor.execute(ins, (user, user_to_unfollow,user))
-    conn.commit()
+    cursor.execute(query, (user, user_to_unfollow, user))
+    data = cursor.fetchone()
+    if(data):
+        ins = """DELETE FROM tag as t WHERE t.username = %s AND t.pID IN(SELECT pID 
+        FROM Photo AS p WHERE p.poster = %s) AND t.pID NOT IN (SELECT pID FROM 
+        sharedwith AS s JOIN belongto AS b USING(groupName,groupCreator) 
+        WHERE b.username= %s)"""
+        cursor.execute(ins, (user, user_to_unfollow,user))
+        conn.commit()
     cursor.close()
     return redirect(url_for('home'))
 
-#Extra Feauture 4 - Faizan Hussain
+#Extra Feature 4 - Faizan Hussain
 
 @app.route('/setTags', methods=["GET", "POST"])
 def setTags():
