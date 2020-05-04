@@ -99,7 +99,8 @@ def registerAuth():
 def home():
     user = session['username']
     cursor = conn.cursor();
-    query = """SELECT pID, postingDate, filePath FROM Photo AS p1 WHERE 
+    query = """SELECT pID, postingDate, filePath, firstName,lastName FROM 
+    Photo AS p1 JOIN person AS pe ON(p1.poster=pe.username) WHERE 
     p1.poster = %s OR p1.pID IN(SELECT pID FROM follow AS f JOIN Photo AS p2 
     ON(f.followee=p2.poster) WHERE f.followStatus=1 AND p2.AllFollowers=1 AND 
     f.follower = %s) OR p1.pID IN (SELECT pID from belongto as b JOIN sharedwith 
