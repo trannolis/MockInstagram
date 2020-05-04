@@ -421,7 +421,7 @@ def reacting():
 
     ins = 'INSERT INTO reactto VALUES(%s, %s, %s, %s, %s)'
     cursor.execute(ins, (username, postID, reactingDate, comm, emoji))
-    query = 'SELECT pID, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
+    query = 'SELECT pID, username, reactionTime, comment, emoji FROM reactto WHERE pID = %s'
     cursor.execute(query, postID)
     data = cursor.fetchall()
     conn.commit()
