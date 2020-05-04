@@ -372,8 +372,16 @@ def search_tag():
     belongto AS b WHERE s.groupName = b.groupName AND s.groupCreator = 
     b.groupCreator AND b.username = %s))"""
     cursor.execute(query, (user_to_searchTag, user, user))
-    data = cursor.fetchone()
+    data = cursor.fetchall()
     if(data):
+        query = """SELECT pID FROM tag WHERE username = %s AND tagStatus > 0 AND 
+            (pID IN (SELECT pID FROM photo AS p NATURAL JOIN follow AS f WHERE 
+            p.allFollowers=1 AND f.follower= %s AND f.followee = p.poster AND 
+            f.followStatus = 1) OR pID IN (SELECT pID FROM sharedwith AS s NATURAL JOIN 
+            belongto AS b WHERE s.groupName = b.groupName AND s.groupCreator = 
+            b.groupCreator AND b.username = %s))"""
+        cursor.execute(query, (user_to_searchTag, user, user))
+        data = cursor.fetchall()
         cursor.close()
         return render_template('show_tag.html', taggedName=user_to_searchTag, posts=data)
     else:
