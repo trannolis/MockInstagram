@@ -1,4 +1,4 @@
-# Finstagram Application using Flask and SQL
+# MockInstagram Application using Flask and SQL
 
 CS-UY 3083 Introduction to Databases
 
