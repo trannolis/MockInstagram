@@ -32,6 +32,8 @@
 	<th>pID</th>
 	<th>Time</th>
 	<th>Post</th>
+	<th>Poster First Name</th>
+	<th>Poster Last Name</th>
 	<th>More</th>
 
 
@@ -40,6 +42,8 @@
 		<td>{{line.pID}}</td>
 		<td>{{line.postingDate}}</td>
 		<td>{{line.filePath}}</td>
+		<td>{{line.firstName}}</td>
+		<td>{{line.lastName}}</td>
 		<td><form action="/reacts" method="GET" enctype = "multipart/form-data">
   		<button style="background: none!important;
   		border: none;
