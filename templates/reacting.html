@@ -8,6 +8,7 @@
 
 <table>
 	<th>Post</th>
+	<th>User</th>
 	<th>Time</th>
 	<th>Emoji</th>
 	<th>Comment</th>
@@ -15,10 +16,10 @@
 {% for line in reactions %}
 	<tr>
 		<td>{{line.pID}}</td>
+		<td>{{line.username}}</td>
 		<td>{{ line.reactionTime }}</td>
 		<td>{{ line.emoji }}</td>
 		<td>{{ line.comment }}</td>
-
 	</tr>
 {% endfor %}
 </table>
